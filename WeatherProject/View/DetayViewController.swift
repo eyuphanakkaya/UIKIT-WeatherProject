@@ -11,7 +11,7 @@ import CoreLocation
 class DetayViewController: UIViewController {
     
     var locationManager:CLLocationManager = CLLocationManager()
-    var myListe = [List]()
+    var myListe = [ListModel]()
     var enlem:Double?
     var boylam:Double?
     @IBOutlet weak var tableView: UITableView!
@@ -31,7 +31,7 @@ class DetayViewController: UIViewController {
         }
         
     }
-    func degerList(enlem:Double,boylam:Double,complation : @escaping ([List])->()){
+    func degerList(enlem:Double,boylam:Double){
         let apiKey = "3f95bd844fb336a3a0ba035d5bc08cf3"
         let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(enlem)&lon=\(boylam)&appid=\(apiKey)&lang=tr")
         URLSession.shared.dataTask(with: url!) { data, response, error in
@@ -41,9 +41,9 @@ class DetayViewController: UIViewController {
             }
             do {
                 let result = try JSONDecoder().decode(ListModel.self, from: data!)
-                for x in result.list {
-                    complation(x.main)
-                }
+                
+                self.myListe = [result]
+                
             } catch {
                 print(error)
             }
@@ -66,13 +66,15 @@ extension DetayViewController:UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var gelenDeger = myListe[indexPath.row]
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DetayCell", for: indexPath)
-        cell.maxSicaklikLabel.text = String(gelenDeger.tempMax)
-        cell.minSicaklikLabel.text = String(gelenDeger.tempMin)
-        cell.gunLabel.text = gelenDeger .dt_txt
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DetayCell", for: indexPath) as? DetayTableViewCell
+        for x in gelenDeger.list {
+            cell?.maxSicaklikLabel.text = String(x.main.tempMax)
+            cell?.minSicaklikLabel.text = String(x.main.tempMin)
+            cell?.gunLabel.text = x.dt_txt
 
+        }
 
-        return cell
+        return cell!
     }
     
 }
@@ -82,9 +84,7 @@ extension DetayViewController:CLLocationManagerDelegate {
         enlem = sonKonum.coordinate.latitude
         boylam = sonKonum.coordinate.longitude
     
-        degerList(enlem: enlem!, boylam: boylam!) { data in
-            self.myListe = data
-        }
+         degerList(enlem: enlem!, boylam: boylam!)
     }
     
     

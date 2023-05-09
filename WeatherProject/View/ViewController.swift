@@ -37,6 +37,10 @@ class ViewController: UIViewController {
         
        
     }
+    
+    @IBAction func detayTiklandi(_ sender: Any) {
+        
+    }
     func tumGetir(enlem:Double,boylam:Double){
         let apiKey = "3f95bd844fb336a3a0ba035d5bc08cf3"
         let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(enlem)&lon=\(boylam)&appid=\(apiKey)&lang=tr")

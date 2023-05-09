@@ -225,7 +225,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Daha Fazla Detay"/>
                                 <connections>
-                                    <segue destination="3rZ-6b-CBt" kind="show" id="HaL-Bx-IC8"/>
+                                    <action selector="detayTiklandi:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rTy-aN-t8z"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Hava Durumu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hbj-gw-ORi">
@@ -275,6 +275,7 @@
                         <outlet property="sehiLabel" destination="vm0-iW-jKQ" id="ne4-Xv-OVM"/>
                         <outlet property="tarihLabel" destination="iMQ-uX-eh8" id="Hsy-ZY-cZN"/>
                         <outlet property="uvIndeksLabel" destination="xZ8-ah-sLf" id="BgB-F6-hYZ"/>
+                        <segue destination="3rZ-6b-CBt" kind="show" id="T9V-E7-BP6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
