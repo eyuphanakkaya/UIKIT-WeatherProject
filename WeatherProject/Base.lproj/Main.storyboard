@@ -222,7 +222,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5dv-NW-XH8">
                                 <rect key="frame" x="118.66666666666667" y="650.33333333333337" width="155.66666666666663" height="35"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Daha Fazla Detay"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Haftalık Detay"/>
                                 <connections>
                                     <segue destination="4iA-NI-Gtb" kind="show" id="vAz-FX-IuK"/>
                                 </connections>
