@@ -38,9 +38,7 @@ class ViewController: UIViewController {
        
     }
     
-    @IBAction func detayTiklandi(_ sender: Any) {
-        
-    }
+    
     func tumGetir(enlem:Double,boylam:Double){
         let apiKey = "3f95bd844fb336a3a0ba035d5bc08cf3"
         let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(enlem)&lon=\(boylam)&appid=\(apiKey)&lang=tr")
@@ -54,7 +52,7 @@ class ViewController: UIViewController {
              let welcome = try JSONDecoder().decode(ListModel.self, from: data!)
                 DispatchQueue.main.async {
                     self.sehiLabel.text = welcome.city.name
-                    for x in welcome.list {
+                    for x in welcome.list! {
                         self.dereceLabel.text = String("\(Int(x.main.temp-273.15))°")
                         self.maxSicaklikLabel.text = String("\(Int(x.main.tempMax-273.15))°" )
                         self.minSicaklikLabel.text = String("\(Int(x.main.tempMin-273.15))°" )
@@ -70,7 +68,15 @@ class ViewController: UIViewController {
                         let date = Date()
                         let dateInWords = dateFormatter.string(from: date)
                         self.tarihLabel.text = dateInWords
-
+                        let iconName = x.weather[0].icon // icon adı
+                        let iconUrl = URL(string: "http://openweathermap.org/img/w/\(iconName).png")! // ikon URL'si
+                        URLSession.shared.dataTask(with: iconUrl) { (data, response, error) in
+                            guard let data = data, error == nil else { return } // veri kontrolü
+                            DispatchQueue.main.async { // arayüz işlemleri ana iş parçacığı üzerinde yapılmalı
+                                let downloadedImage = UIImage(data: data) // UIImage olarak dönüştür
+                                self.iconİmageView.image = downloadedImage // atama işlemi
+                            }
+                        }.resume()
 
                     }
                 }

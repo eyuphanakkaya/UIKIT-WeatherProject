@@ -13,7 +13,7 @@ struct ListModel:Codable{
     let cod:String
     let message : Int
     let cnt : Int
-    let list:[List]
+    let list:[List]?
     let city:_City
 }
 

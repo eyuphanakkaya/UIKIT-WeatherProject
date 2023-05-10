@@ -11,9 +11,10 @@ import CoreLocation
 class DetayViewController: UIViewController {
     
     var locationManager:CLLocationManager = CLLocationManager()
-    var myListe = [ListModel]()
+    var myListe = [List]()
     var enlem:Double?
     var boylam:Double?
+    
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,7 @@ class DetayViewController: UIViewController {
     func degerList(enlem:Double,boylam:Double){
         let apiKey = "3f95bd844fb336a3a0ba035d5bc08cf3"
         let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(enlem)&lon=\(boylam)&appid=\(apiKey)&lang=tr")
+        self.myListe.removeAll()
         URLSession.shared.dataTask(with: url!) { data, response, error in
             if error != nil || data == nil  {
                 print("Hata")
@@ -41,8 +43,13 @@ class DetayViewController: UIViewController {
             }
             do {
                 let result = try JSONDecoder().decode(ListModel.self, from: data!)
+                if let gelenDeger  = result.list {
+                    self.myListe = gelenDeger
+                }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
                 
-                self.myListe = [result]
                 
             } catch {
                 print(error)
@@ -67,12 +74,26 @@ extension DetayViewController:UITableViewDataSource,UITableViewDelegate {
         var gelenDeger = myListe[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "DetayCell", for: indexPath) as? DetayTableViewCell
-        for x in gelenDeger.list {
-            cell?.maxSicaklikLabel.text = String(x.main.tempMax)
-            cell?.minSicaklikLabel.text = String(x.main.tempMin)
-            cell?.gunLabel.text = x.dt_txt
+        cell?.minSicaklikLabel.text = String("\(Int(gelenDeger.main.tempMin-273.15))°" )
+        cell?.maxSicaklikLabel.text = String("\(Int(gelenDeger.main.tempMax-273.15))°" )
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.date(from: gelenDeger.dt_txt)
+        dateFormatter.dateFormat = "HH:mm/dd/MM/yyyy"
+        let dateString = dateFormatter.string(from: date!)
+        cell?.gunLabel.text = dateString
+        let iconName = gelenDeger.weather[0].icon // icon adı
+        let iconUrl = URL(string: "http://openweathermap.org/img/w/\(iconName).png")! // ikon URL'si
+        URLSession.shared.dataTask(with: iconUrl) { (data, response, error) in
+            guard let data = data, error == nil else { return } // veri kontrolü
+            DispatchQueue.main.async { // arayüz işlemleri ana iş parçacığı üzerinde yapılmalı
+                let downloadedImage = UIImage(data: data) // UIImage olarak dönüştür
+                cell?.durumImageView.image = downloadedImage // atama işlemi
+            }
+        }.resume()
 
-        }
+
+
 
         return cell!
     }

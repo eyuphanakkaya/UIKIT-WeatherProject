@@ -9,6 +9,7 @@ import UIKit
 
 class DetayTableViewCell: UITableViewCell {
 
+    
     @IBOutlet weak var durumImageView: UIImageView!
     @IBOutlet weak var minSicaklikLabel: UILabel!
     @IBOutlet weak var maxSicaklikLabel: UILabel!
